@@ -132,28 +132,6 @@ export default function AuthPage() {
     handleCodeInApp: true,
   };
 
-  const handleSendEmailLink = async () => {
-    if (!email) {
-      setError("Please enter your email address first.");
-      return;
-    }
-
-    setError(null);
-    setSuccess(null);
-    setIsMagicLinkLoading(true);
-
-    try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      localStorage.setItem("emailForSignIn", email);
-      setSuccess("A sign-in link has been sent to your email! Check your inbox.");
-    } catch (err: unknown) {
-      const firebaseError = err as { code: string };
-      setError(getErrorMessage(firebaseError.code));
-    } finally {
-      setIsMagicLinkLoading(false);
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -263,21 +241,6 @@ export default function AuthPage() {
                 </svg>
               )}
               Continue with Google
-            </Button>
-
-            <Button
-              type="button"
-              variant="secondary"
-              className="w-full"
-              onClick={handleSendEmailLink}
-              disabled={isMagicLinkLoading || !email}
-            >
-              {isMagicLinkLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Mail className="mr-2 h-4 w-4" />
-              )}
-              Send Magic Link
             </Button>
           </div>
 
